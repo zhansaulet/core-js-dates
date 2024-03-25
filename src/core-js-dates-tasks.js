@@ -320,8 +320,8 @@ function getWorkSchedule(period, countWorkDays, countOffDays) {
 
   scheduleArr.push(start);
   currentDate.setDate(start.getDate() + 1);
-  console.log(start);
-  console.log(scheduleArr);
+  // console.log(start);
+  // console.log(scheduleArr);
 
   for (let i = 1; i <= diff + 1; i += countOffDays) {
     let j = 1;
@@ -332,7 +332,7 @@ function getWorkSchedule(period, countWorkDays, countOffDays) {
   }
 
   scheduleArr.push(end);
-  console.log(scheduleArr);
+  // console.log(scheduleArr);
 }
 
 /**
