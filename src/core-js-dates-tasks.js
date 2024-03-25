@@ -168,8 +168,9 @@ function isDateInPeriod(date, period) {
  * '1999-01-05T02:20:00.000Z' => '1/5/1999, 2:20:00 AM'
  * '2010-12-15T22:59:00.000Z' => '12/15/2010, 10:59:00 PM'
  */
-function formatDate(/* date */) {
-  throw new Error('Not implemented');
+function formatDate(date) {
+  const dateFormat = new Date(date);
+  return dateFormat.toLocaleString('en-US', { timeZone: 'UTC' });
 }
 
 /**
@@ -184,8 +185,19 @@ function formatDate(/* date */) {
  * 12, 2023 => 10
  * 1, 2024 => 8
  */
-function getCountWeekendsInMonth(/* month, year */) {
-  throw new Error('Not implemented');
+function getCountWeekendsInMonth(month, year) {
+  const date = new Date(year, month - 1, 1);
+  let weekendDays = 0;
+
+  while (date.getMonth() === month - 1) {
+    if (date.getDay() === 0 || date.getDay() === 6) {
+      weekendDays += 1;
+    }
+
+    date.setDate(date.getDate() + 1);
+  }
+
+  return weekendDays;
 }
 
 /**
@@ -201,8 +213,13 @@ function getCountWeekendsInMonth(/* month, year */) {
  * Date(2024, 0, 31) => 5
  * Date(2024, 1, 23) => 8
  */
-function getWeekNumberByDate(/* date */) {
-  throw new Error('Not implemented');
+function getWeekNumberByDate(date) {
+  const startDate = new Date(date.getFullYear(), 0, 1);
+  const milliseconds = 1000 * 60 * 60 * 24;
+
+  const diff = (date - startDate) / milliseconds;
+
+  return Math.ceil((diff + 1 + ((startDate.getDay() + 6) % 7)) / 7);
 }
 
 /**
