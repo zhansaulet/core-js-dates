@@ -233,8 +233,41 @@ function getWeekNumberByDate(date) {
  * Date(2024, 0, 13) => Date(2024, 8, 13)
  * Date(2023, 1, 1) => Date(2023, 9, 13)
  */
-function getNextFridayThe13th(/* date */) {
-  throw new Error('Not implemented');
+function getNextFridayThe13th(date) {
+  const day = date.getDate();
+  let thirteenthDate = date;
+  let isFriday = false;
+
+  if (day < 13) {
+    thirteenthDate = date.setDate(13);
+
+    if (new Date(thirteenthDate).getDay() === 5) isFriday = true;
+
+    if (isFriday) return new Date(thirteenthDate);
+
+    for (; isFriday === false; ) {
+      thirteenthDate = date.setMonth(date.getMonth() + 1);
+      if (new Date(thirteenthDate).getDay() === 5) isFriday = true;
+    }
+    return new Date(thirteenthDate);
+  }
+  if (day === 13) {
+    if (date.getDay() === 5) isFriday = true;
+
+    if (isFriday) return date;
+    for (; isFriday === false; ) {
+      thirteenthDate = date.setMonth(date.getMonth() + 1);
+      if (new Date(thirteenthDate).getDay() === 5) isFriday = true;
+    }
+    return new Date(thirteenthDate);
+  }
+
+  for (; isFriday === false; ) {
+    thirteenthDate = date.setMonth(date.getMonth() + 1);
+    thirteenthDate = date.setDate(13);
+    if (new Date(thirteenthDate).getDay() === 5) isFriday = true;
+  }
+  return new Date(thirteenthDate);
 }
 
 /**
@@ -278,8 +311,28 @@ function getQuarter(date) {
  * { start: '01-01-2024', end: '15-01-2024' }, 1, 3 => ['01-01-2024', '05-01-2024', '09-01-2024', '13-01-2024']
  * { start: '01-01-2024', end: '10-01-2024' }, 1, 1 => ['01-01-2024', '03-01-2024', '05-01-2024', '07-01-2024', '09-01-2024']
  */
-function getWorkSchedule(/* period, countWorkDays, countOffDays */) {
-  throw new Error('Not implemented');
+function getWorkSchedule(period, countWorkDays, countOffDays) {
+  const start = new Date(period.start.split('-').reverse().join('-'));
+  const end = new Date(period.end.split('-').reverse().join('-'));
+  const diff = (end - start) / 86400000;
+  const scheduleArr = [];
+  const currentDate = start;
+
+  scheduleArr.push(start);
+  currentDate.setDate(start.getDate() + 1);
+  console.log(start);
+  console.log(scheduleArr);
+
+  for (let i = 1; i <= diff + 1; i += countOffDays) {
+    let j = 1;
+    for (; j <= countWorkDays; j += 1) {
+      scheduleArr.push(currentDate);
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+  }
+
+  scheduleArr.push(end);
+  console.log(scheduleArr);
 }
 
 /**
