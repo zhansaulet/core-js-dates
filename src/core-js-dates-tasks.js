@@ -312,27 +312,33 @@ function getQuarter(date) {
  * { start: '01-01-2024', end: '10-01-2024' }, 1, 1 => ['01-01-2024', '03-01-2024', '05-01-2024', '07-01-2024', '09-01-2024']
  */
 function getWorkSchedule(period, countWorkDays, countOffDays) {
-  const start = new Date(period.start.split('-').reverse().join('-'));
+  let start = new Date(period.start.split('-').reverse().join('-'));
   const end = new Date(period.end.split('-').reverse().join('-'));
-  const diff = (end - start) / 86400000;
   const scheduleArr = [];
-  const currentDate = start;
 
-  scheduleArr.push(start);
-  currentDate.setDate(start.getDate() + 1);
-  // console.log(start);
-  // console.log(scheduleArr);
-
-  for (let i = 1; i <= diff + 1; i += countOffDays) {
-    let j = 1;
-    for (; j <= countWorkDays; j += 1) {
-      scheduleArr.push(currentDate);
-      currentDate.setDate(currentDate.getDate() + 1);
+  let tempDate = new Date(start);
+  while (start <= end) {
+    for (let i = 1; i <= countWorkDays; i += 1) {
+      const month = new Date(start).getMonth() + 1;
+      const day = new Date(start).getDate();
+      const year = new Date(start).getFullYear();
+      if (start <= end) {
+        scheduleArr.push(
+          [
+            (day > 9 ? '' : '0') + day,
+            (month > 9 ? '' : '0') + month,
+            year,
+          ].join('-')
+        );
+      }
+      tempDate = new Date(start).setDate(new Date(start).getDate() + 1);
+      start = new Date(tempDate);
     }
+    start = new Date(tempDate).setDate(
+      new Date(tempDate).getDate() + countOffDays
+    );
   }
-
-  scheduleArr.push(end);
-  // console.log(scheduleArr);
+  return scheduleArr;
 }
 
 /**
